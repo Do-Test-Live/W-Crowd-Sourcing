@@ -1,0 +1,19 @@
+ErrorDocument 404 http://localhost/W-Wayshk-Admin/404.php
+
+RewriteEngine on
+
+RewriteRule ^Login index.php [NE,L]
+
+RewriteRule ^Register register.php [NE,L]
+
+RewriteRule ^Dashboard dashboard.php [NE,L]
+
+RewriteRule ^Profile profile.php [NE,L]
+
+RewriteRule ^Question answered_questions.php [NE,L]
+
+RewriteRule ^New-Question submit_request.php [NE,L]
+
+RewriteRule ^My-Questions my_questions.php [NE,L]
+
+RewriteRule ^Insert insert.php [NE,L]
