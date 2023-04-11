@@ -17,3 +17,5 @@ RewriteRule ^New-Question submit_request.php [NE,L]
 RewriteRule ^My-Questions my_questions.php [NE,L]
 
 RewriteRule ^Insert insert.php [NE,L]
+
+RewriteRule ^Update update.php [NE,L]

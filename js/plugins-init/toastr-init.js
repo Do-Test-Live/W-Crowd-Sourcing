@@ -86,7 +86,7 @@ if (x == 3) {
 }
 
 if (x == 4) {
-    toastr.success("Your Request Has been Successful ", "Successful", {
+    toastr.success("Question Submitted Successfully ", "Successful", {
         timeOut: 3000,
         closeButton: !0,
         debug: !1,

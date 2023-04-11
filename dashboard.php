@@ -90,7 +90,10 @@ $userid = $_SESSION['userid'];
 									</span>
                                         <div class="media-body text-white text-right">
                                             <p class="mb-1">Total Question Asked</p>
-                                            <h3 class="text-white">760</h3>
+                                            <?php
+                                            $total_question = $db_handle->runQuery("select count('question_id') as number from question");
+                                            ?>
+                                            <h3 class="text-white"><?php echo $total_question[0]['number']; ?></h3>
                                         </div>
                                     </div>
                                 </div>
@@ -105,7 +108,10 @@ $userid = $_SESSION['userid'];
 									</span>
                                         <div class="media-body text-white text-right">
                                             <p class="mb-1">Total Users</p>
-                                            <h3 class="text-white">560</h3>
+                                            <?php
+                                            $total_user = $db_handle->runQuery("select count('user_id') as number from user");
+                                            ?>
+                                            <h3 class="text-white"><?php echo $total_user[0]['number']; ?></h3>
                                         </div>
                                     </div>
                                 </div>
@@ -134,7 +140,7 @@ $userid = $_SESSION['userid'];
 										<i class="flaticon-381-heart"></i>
 									</span>
                                         <div class="media-body text-white text-right">
-                                            <p class="mb-1">Total Points</p>
+                                            <p class="mb-1">My Points</p>
                                             <h3 class="text-white">76</h3>
                                         </div>
                                     </div>
@@ -163,54 +169,27 @@ $userid = $_SESSION['userid'];
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>User 1</td>
-                                        <td>Take Photo</td>
-                                        <td>Hiking, Reading, Sports</td>
-                                        <td>10</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"><i class="fa fa-pencil"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>User 2</td>
-                                        <td>Physical</td>
-                                        <td>Music, Reading, Social Work</td>
-                                        <td>10</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"><i class="fa fa-pencil"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>User 3</td>
-                                        <td>Mental</td>
-                                        <td>Computer Games, Revision, Photography</td>
-                                        <td>10</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"><i class="fa fa-pencil"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>User 4</td>
-                                        <td>F2F</td>
-                                        <td>Computer Games, Revision, Photography</td>
-                                        <td>5</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"><i class="fa fa-pencil"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <?php
+                                    $select_question = $db_handle->runQuery("SELECT * FROM question,question_type,user where question.method = '1' and question.type = question_type.id AND question.user_id = user.user_id");
+                                    $no_select_question = $db_handle->numRows("SELECT * FROM question,question_type,user where question.method = '1' and question.type = question_type.id AND question.user_id = user.user_id");
+                                    for($j=0;$j<$no_select_question;$j++){
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $j+1;?></td>
+                                            <td><?php echo $select_question[$j]['user_name'];?></td>
+                                            <td><?php echo $select_question[$j]['question_type'];?></td>
+                                            <td><?php echo $select_question[$j]['tags'];?></td>
+                                            <td><?php echo $select_question[$j]['payment'];?></td>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"><i
+                                                                class="fa fa-pencil"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    ?>
                                     </tbody>
                                 </table>
                             </div>

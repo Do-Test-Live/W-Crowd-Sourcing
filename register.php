@@ -134,18 +134,19 @@ if (isset($_SESSION['userid'])) {
                                             <div class="col-md-6 col-sm-12">
                                                 <label class="mb-1 text-white"><strong>What type of request would you like to accept</strong></label>
                                                 <div class="form-group" style="background-color: #ffffff; padding: 20px">
-                                                    <div class="radio">
-                                                        <label><input type="radio" name="request_type" value="Take photo" required> Take photo</label>
-                                                    </div>
-                                                    <div class="radio">
-                                                        <label><input type="radio" name="request_type" value="Physical"> Physical</label>
-                                                    </div>
-                                                    <div class="radio">
-                                                        <label><input type="radio" name="request_type" value="Mental"> Mental (E.g. question or questionnaire)</label>
-                                                    </div>
-                                                    <div class="radio">
-                                                        <label><input type="radio" name="request_type" value="F2F"> F2F</label>
-                                                    </div>
+                                                    <?php
+                                                    $question_type = $db_handle->runQuery("select * from question_type");
+                                                    $no_question_type = $db_handle->numRows("select * from question_type");
+                                                    for($i=0; $i<$no_question_type;$i++){
+                                                        ?>
+                                                        <div class="radio">
+                                                            <label><input type="radio" name="request_type" value="<?php echo $question_type[$i]['id'];?>" required> <?php echo $question_type[$i]['question_type'];?></label>
+                                                        </div>
+                                                        <?php
+                                                    }
+                                                    ?>
+
+
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-sm-12">

@@ -3,6 +3,7 @@ session_start();
 require_once("include/dbController.php");
 $db_handle = new DBController();
 date_default_timezone_set("Asia/Hong_Kong");
+$userid = $_SESSION['userid'];
 
 if (isset($_POST["sign_up"])) {
     $username = $db_handle->checkValue($_POST['username']);
@@ -36,4 +37,32 @@ VALUES ('$username','$email','$Pwd_hashed','$college','$major','$hall','$society
                 window.location.href='Register';
                 </script>";
     }
+}
+
+
+if(isset($_POST['question'])){
+    $question = $db_handle->checkValue($_POST['new_question']);
+    $type = $db_handle->checkValue($_POST['type']);
+    $tags = $_POST['tags'];
+    $method = $db_handle->checkValue($_POST['method']);
+    $payment = $db_handle->checkValue($_POST['payment']);
+    $waiting_time = $db_handle->checkValue($_POST['waiting_time']);
+    $select_tags = implode(',',$tags);
+    $inserted_at = date("Y-m-d H:i:s");
+    $userid = $_SESSION['userid'];
+
+    $insert = $db_handle->insertQuery("INSERT INTO `question`(`question`,`user_id`, `type`, `tags`, `method`, `payment`, `waiting_time`, `inserted_at`) VALUES 
+                                                                ('$question','$userid','$type','$select_tags','$method','$payment','$waiting_time','$inserted_at')");
+    if($insert){
+        echo "<script>
+                document.cookie = 'alert = 4;';
+                window.location.href='New-Question';
+                </script>";
+    }else{
+        echo "<script>
+                document.cookie = 'alert = 5;';
+                window.location.href='New-Question';
+                </script>";
+    }
+
 }

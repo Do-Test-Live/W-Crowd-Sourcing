@@ -93,26 +93,30 @@ $userid = $_SESSION['userid'];
                     <div class="card">
                         <div class="card-body">
                             <div class="basic-form">
-                                <form>
-
+                                <form action="Insert" method="post">
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label>Question</label>
-                                            <textarea class="form-control" rows="4" id="comment" required></textarea>
+                                            <textarea class="form-control" rows="4" id="comment" name="new_question" required></textarea>
                                         </div>
                                         <div class="form-group col-md-12">
                                             <label>Choose Question Type:</label>
-                                            <select id="inputState" class="form-control default-select">
+                                            <select class="form-control default-select" name="type">
                                                 <option selected>Choose Question Type.</option>
-                                                <option value="Take photo">Take photo</option>
-                                                <option value="Physical">Physical</option>
-                                                <option value="Mental">Mental</option>
-                                                <option value="F2F">F2F</option>
+                                                <?php
+                                                $question_type = $db_handle->runQuery("select * from question_type");
+                                                $no_question_type = $db_handle->numRows("select * from question_type");
+                                                for($i=0; $i<$no_question_type;$i++){
+                                                    ?>
+                                                    <option value="<?php echo $question_type[$i]['id'];?>"><?php echo $question_type[$i]['question_type'];?></option>
+                                                    <?php
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-12">
                                             <label>Select Tags for that question (At most 3):</label>
-                                            <select multiple class="form-control default-select" id="sel2">
+                                            <select multiple class="form-control default-select" id="sel2" name="tags[]">
                                                 <option value="Computer games">Computer games</option>
                                                 <option value="Music">Music</option>
                                                 <option value="Reading">Reading</option>
@@ -125,23 +129,29 @@ $userid = $_SESSION['userid'];
                                         </div>
                                         <div class="form-group col-md-12">
                                             <label>Choose Method</label>
-                                            <select id="inputState" class="form-control default-select">
-                                                <option selected>Choose Answer Method.</option>
-                                                <option value="1">First-come-first-serve</option>
-                                                <option value="2">Best answer</option>
-                                                <option value="3">Mixed mode</option>
+                                            <select id="answer_method" class="form-control default-select" name="method" onchange="myFunction()">
+                                                <option selected value="">Choose Answer Method.</option>
+                                                <?php
+                                                $answer_method = $db_handle->runQuery("select * from answer_method");
+                                                $no_answer_method = $db_handle->numRows("select * from answer_method");
+                                                for($i=0; $i<$no_answer_method;$i++){
+                                                    ?>
+                                                    <option value="<?php echo $answer_method[$i]['id'];?>"><?php echo $answer_method[$i]['method_name'];?></option>
+                                                    <?php
+                                                }
+                                                ?>
                                             </select>
                                         </div>
-                                        <div class="form-group col-md-12">
+                                        <div class="form-group col-md-12" id="payment">
                                             <label>Payment</label>
-                                            <input type="number" class="form-control input-default " placeholder="payment">
+                                            <input type="number" class="form-control input-default " placeholder="payment" name="payment">
                                         </div>
-                                        <div class="form-group col-md-12">
+                                        <div class="form-group col-md-12" id="time" style="display: none">
                                             <label>Waiting Time (In Hours)</label>
-                                            <input type="text" class="form-control input-default " placeholder="waiting time">
+                                            <input type="text" class="form-control input-default" placeholder="waiting time" name="waiting_time" value="0">
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Submit Question</button>
+                                    <button type="submit" class="btn btn-primary" name="question">Submit Question</button>
                                 </form>
                             </div>
                         </div>
@@ -174,7 +184,15 @@ $userid = $_SESSION['userid'];
     <!-- Required vendors -->
     <?php include('include/js.php'); ?>
     <script>
-
+        function myFunction() {
+            let x = document.getElementById("answer_method").value;
+            let p =document.getElementById("time");
+            if(x == 2 || x == 3){
+                p.style.display = 'block';
+            }else{
+                p.style.display = 'none';
+            }
+        }
     </script>
 
 </body>
