@@ -66,3 +66,25 @@ if(isset($_POST['question'])){
     }
 
 }
+
+
+if(isset($_POST['submit_answer'])){
+    $question_id = $db_handle->checkValue($_POST['question_no']);
+    $answer = $db_handle->checkValue($_POST['answer']);
+    $inserted_at = date("Y-m-d H:i:s");
+    $userid = $_SESSION['userid'];
+
+    $insert = $db_handle->insertQuery("INSERT INTO `answer`( `user_id`, `question_id`, `answer`, `inserted_at`) VALUES ('$userid','$question_id','$answer','$inserted_at')");
+
+    if($insert){
+        echo "<script>
+                document.cookie = 'alert = 3;';
+                window.location.href='Dashboard';
+                </script>";
+    }else{
+        echo "<script>
+                document.cookie = 'alert = 5;';
+                window.location.href='Dashboard';
+                </script>";
+    }
+}

@@ -20,7 +20,7 @@
 
         <div class="copyright">
             <p><strong>Crowd Sourcing</strong> © 2023 All Rights Reserved</p>
-            <p>Made with <span class="heart"></span>NGT Tech</p>
+            <p>Made with <span class="heart"></span>CROWD SOURCING</p>
         </div>
     </div>
 </div>

@@ -193,7 +193,7 @@ $userid = $_SESSION['userid'];
                                                 </td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"><i
+                                                        <a href="View-Answer?id=<?php echo $question[$i]['question_id']?>" class="btn btn-primary shadow btn-xs sharp mr-1"><i
                                                                     class="fa fa-eye"></i></a>
                                                     </div>
                                                 </td>
