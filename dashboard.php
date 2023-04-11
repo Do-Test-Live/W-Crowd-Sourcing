@@ -125,7 +125,7 @@ $userid = $_SESSION['userid'];
 										<i class="flaticon-381-search-2"></i>
 									</span>
                                         <div class="media-body text-white text-right">
-                                            <p class="mb-1">Total Question Answered</p>
+                                            <p class="mb-1">Questions You Answered</p>
                                             <?php
                                             $answer = $db_handle->runQuery("SELECT COUNT(answer_id) as answer from answer WHERE user_id = '$userid'");
                                             ?>
