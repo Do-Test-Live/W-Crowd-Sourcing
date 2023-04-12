@@ -92,7 +92,7 @@ $userid = $_SESSION['userid'];
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Open Questions to Answer</h4>
+                            <h4 class="card-title">Questions that I Answered</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -101,40 +101,30 @@ $userid = $_SESSION['userid'];
                                     <tr>
                                         <th>Sl No</th>
                                         <th>User</th>
-                                        <th>Question Type</th>
+                                        <th>Question</th>
                                         <th>Tags</th>
-                                        <th>Payment</th>
+                                        <th>Rating</th>
+                                        <th>Answer</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>User 1</td>
-                                        <td>Take Photo</td>
-                                        <td>Hiking, Reading, Sports</td>
-                                        <td>10</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>User 2</td>
-                                        <td>Physical</td>
-                                        <td>Music, Reading, Social Work</td>
-                                        <td>10</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>User 3</td>
-                                        <td>Mental</td>
-                                        <td>Computer Games, Revision, Photography</td>
-                                        <td>10</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>User 4</td>
-                                        <td>F2F</td>
-                                        <td>Computer Games, Revision, Photography</td>
-                                        <td>5</td>
-                                    </tr>
+                                    <?php
+                                    $question = $db_handle->runQuery("select * from question, answer, user WHERE answer.user_id = '$userid' and answer.question_id = question.question_id and answer.user_id = user.user_id");
+                                    $no_question = $db_handle->numRows("select * from question, answer, user WHERE answer.user_id = '$userid' and answer.question_id = question.question_id and answer.user_id = user.user_id");
+                                    for($i=0; $i<$no_question; $i++){
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $i+1;?></td>
+                                            <td><?php echo $question[$i]['user_name'];?></td>
+                                            <td><?php echo $question[$i]['question'];?></td>
+                                            <td><?php echo $question[$i]['tags'];?></td>
+                                            <td><?php echo $question[$i]['rating'];?></td>
+                                            <td><?php echo $question[$i]['answer'];?></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    ?>
+
                                     </tbody>
                                 </table>
                             </div>

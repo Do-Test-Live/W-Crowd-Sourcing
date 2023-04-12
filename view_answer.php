@@ -87,7 +87,7 @@ $question_id = $_GET['id'];
         <!-- row -->
         <div class="container-fluid">
             <div class="form-head mb-4">
-                <h2 class="text-black font-w600 mb-0">Submit New Question</h2>
+                <h2 class="text-black font-w600 mb-0">View Answer</h2>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -101,12 +101,14 @@ $question_id = $_GET['id'];
                                         <th>User Name</th>
                                         <th>Answer</th>
                                         <th>Time</th>
+                                        <th>Rating</th>
+                                        <th>Edit</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php
-                                    $question = $db_handle->runQuery("SELECT q.question, u.user_name,a.answer,a.inserted_at from question as q,user as u,answer as a where q.question_id = a.question_id and q.question_id = '$question_id' and a.user_id = u.user_id;");
-                                    $no_question = $db_handle->numRows("SELECT q.question, u.user_name,a.answer,a.inserted_at from question as q,user as u,answer as a where q.question_id = a.question_id and q.question_id = '$question_id' and a.user_id = u.user_id;");
+                                    $question = $db_handle->runQuery("SELECT q.question, u.user_name,a.answer,a.inserted_at,a.answer_id,a.rating from question as q,user as u,answer as a where q.question_id = a.question_id and q.question_id = '$question_id' and a.user_id = u.user_id;");
+                                    $no_question = $db_handle->numRows("SELECT q.question, u.user_name,a.answer,a.inserted_at,a.answer_id,a.rating from question as q,user as u,answer as a where q.question_id = a.question_id and q.question_id = '$question_id' and a.user_id = u.user_id;");
                                     for($i=0; $i<$no_question; $i++){
                                         ?>
                                         <tr>
@@ -118,6 +120,11 @@ $question_id = $_GET['id'];
                                             $date_formatted = date_format($date, "d F y, g:i A");
                                             ?>
                                             <td><?php echo $date_formatted;?></td>
+                                            <td><?php echo $question[$i]['rating'];?></td>
+                                            <td><div class="d-flex">
+                                                    <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModalCenter"
+                                                            onclick="passVariable(<?php echo $question[$i]['answer_id'];?>);">Rating</button>
+                                                </div></td>
 
                                         </tr>
                                         <?php
@@ -146,6 +153,35 @@ $question_id = $_GET['id'];
 
 
     </div>
+
+    <div class="modal fade" id="exampleModalCenter">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rating</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="Update" method="post">
+                        <div class="form-row">
+                            <input type="hidden" value="" id="question_id" name="id">
+                            <div class="form-group col-md-12" id="payment">
+                                <label>Rating (Between 1 to 5)</label>
+                                <input type="text" class="form-control input-default" placeholder="Rating" name="rating" pattern="[1-5]">
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger light" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="submit_rating">Submit Rating</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <!--**********************************
         Main wrapper end
     ***********************************-->
@@ -156,16 +192,11 @@ $question_id = $_GET['id'];
     <!-- Required vendors -->
     <?php include('include/js.php'); ?>
     <script>
-        function myFunction() {
-            let x = document.getElementById("answer_method").value;
-            let p =document.getElementById("time");
-            if(x == 2 || x == 3){
-                p.style.display = 'block';
-            }else{
-                p.style.display = 'none';
-            }
+        function passVariable(x){
+            document.getElementById("question_id").value = x;
         }
     </script>
+
 
 </body>
 

@@ -145,7 +145,7 @@ $userid = $_SESSION['userid'];
                                         <div class="media-body text-white text-right">
                                             <p class="mb-1">My Points</p>
                                             <?php
-                                            $points = $db_handle->runQuery("SELECT SUM(payment) as point FROM answer,question where answer.user_id= '$userid' and question.question_id = answer.question_id;");
+                                            $points = $db_handle->runQuery("SELECT SUM(points) as point FROM `answer` where user_id = '$userid'");
                                             ?>
                                             <h3 class="text-white"><?php echo $points[0]['point'];?></h3>
                                         </div>
@@ -177,8 +177,8 @@ $userid = $_SESSION['userid'];
                                     </thead>
                                     <tbody>
                                     <?php
-                                    $select_question = $db_handle->runQuery("SELECT * FROM question,question_type,user where question.method = '1' and question.type = question_type.id AND question.user_id = user.user_id order by question.question_id desc");
-                                    $no_select_question = $db_handle->numRows("SELECT * FROM question,question_type,user where question.method = '1' and question.type = question_type.id AND question.user_id = user.user_id order by question.question_id desc");
+                                    $select_question = $db_handle->runQuery("SELECT * FROM question,question_type,user where question.method = '1' and question.user_id != '$userid' and question.type = question_type.id AND question.user_id = user.user_id order by question.question_id desc");
+                                    $no_select_question = $db_handle->numRows("SELECT * FROM question,question_type,user where question.method = '1' and question.user_id != '$userid' and question.type = question_type.id AND question.user_id = user.user_id order by question.question_id desc");
                                     for($j=0;$j<$no_select_question;$j++){
                                         ?>
                                         <tr>
@@ -240,7 +240,7 @@ $userid = $_SESSION['userid'];
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
+                    <h5 class="modal-title">Rating</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>

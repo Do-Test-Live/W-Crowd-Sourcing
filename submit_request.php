@@ -143,8 +143,8 @@ $userid = $_SESSION['userid'];
                                             </select>
                                         </div>
                                         <div class="form-group col-md-12" id="payment">
-                                            <label>Payment</label>
-                                            <input type="number" class="form-control input-default " placeholder="payment" name="payment">
+                                            <!--<label>Payment</label>-->
+                                            <input type="hidden" class="form-control input-default " placeholder="payment" name="payment" value="1">
                                         </div>
                                         <div class="form-group col-md-12" id="time" style="display: none">
                                             <label>Waiting Time (In Hours)</label>
