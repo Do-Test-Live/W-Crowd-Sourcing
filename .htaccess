@@ -18,6 +18,8 @@ RewriteRule ^My-Questions my_questions.php [NE,L]
 
 RewriteRule ^View-Answer view_answer.php [NE,L]
 
+RewriteRule ^Notification question_answer.php [NE,L]
+
 RewriteRule ^Insert insert.php [NE,L]
 
 RewriteRule ^Update update.php [NE,L]

@@ -170,3 +170,34 @@ if (isset($_POST['submit_answer'])) {
                 </script>";
     }
 }
+
+if(isset($_POST['submit_notification_answer'])){
+    $question_id = $db_handle->checkValue($_POST['question_id']);
+    $notification_id = $db_handle->checkValue($_POST['notification_id']);
+    $answer = $db_handle->checkValue($_POST['answer']);
+    $userid = $_SESSION['userid'];
+    $inserted_at = date("Y-m-d H:i:s");
+
+    $check = $db_handle->runQuery("select * from answer where user_id = '$userid' and question_id = '$question_id'");
+    $no_check = $db_handle->numRows("select * from answer where user_id = '$userid' and question_id = '$question_id'");
+    if($no_check <= 0){
+        $update = $db_handle->insertQuery("UPDATE `notification` SET `status`='1' WHERE notification_id = '$notification_id'");
+        if($update){
+            $insert = $db_handle->insertQuery("INSERT INTO `answer`( `user_id`, `question_id`, `answer`, `inserted_at`) VALUES ('$userid','$question_id','$answer','$inserted_at')");
+            if($insert){
+                echo "<script>
+                document.cookie = 'alert = 3;';
+                window.location.href='Dashboard';
+                </script>";
+            }else{
+                echo "<script>
+                document.cookie = 'alert = 5;';
+                window.location.href='Dashboard';
+                </script>";
+            }
+        }
+    }echo "<script>
+                document.cookie = 'alert = 6;';
+                window.location.href='Dashboard';
+                </script>";
+}
