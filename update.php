@@ -34,8 +34,8 @@ if(isset($_POST['submit_rating'])){
     $id = $db_handle->checkValue($_POST['id']);
     $rating = $db_handle->checkValue($_POST['rating']);
 
-    $fetch_point = $db_handle->runQuery("select points from answer where answer_id = '$id'");
-    $point = $fetch_point[0]['points'];
+
+    $point = 1;
     if($rating == '5'){
         $update_point = $point + 3;
     }elseif ($rating == '4'){
@@ -61,6 +61,26 @@ if(isset($_POST['submit_rating'])){
         echo "<script>
                 document.cookie = 'alert = 5;';
                 window.location.href='My-Questions';
+                </script>";
+    }
+}
+
+if(isset($_POST['variable'])){
+    $a = $db_handle->checkValue($_POST['a']);
+    $b = $db_handle->checkValue($_POST['b']);
+    $c = $db_handle->checkValue($_POST['c']);
+    $updated_at = date("Y-m-d H:i:s");
+
+    $update = $db_handle->insertQuery("UPDATE `variables` SET `a`='$a',`b`='$b',`c`='$c',`updated_at`='$updated_at' WHERE id='1'");
+    if($update){
+        echo "<script>
+                document.cookie = 'alert = 3;';
+                window.location.href='Dashboard';
+                </script>";
+    }else{
+        echo "<script>
+                document.cookie = 'alert = 5;';
+                window.location.href='Dashboard';
                 </script>";
     }
 }

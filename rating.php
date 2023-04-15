@@ -96,6 +96,7 @@ $question_id = $_GET['question_id'];
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
+                                <h4 class="text-black">Answers</h4>
                                 <table id="example3" class="display min-w850">
                                     <thead>
                                     <tr>
@@ -116,6 +117,39 @@ $question_id = $_GET['question_id'];
                                             <td><?php echo $answer[$i]['user_name'];?></td>
                                             <td><?php echo $answer[$i]['answer'];?></td>
                                             <td><?php echo $answer[$i]['rating'];?></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <h4 class="text-black">Scores</h4>
+                                <table id="example3" class="display min-w850">
+                                    <thead>
+                                    <tr>
+                                        <th>Sl No</th>
+                                        <th>User Name</th>
+                                        <th>Score</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    $answer= $db_handle->runQuery("SELECT * FROM score, user WHERE score.question_id = '$question_id' AND user.user_id = score.user_id and user.user_type = '1' ORDER BY score DESC;");
+                                    $no_answer = $db_handle->numRows("SELECT * FROM score, user WHERE score.question_id = '$question_id' AND user.user_id = score.user_id and user.user_type = '1' ORDER BY score DESC;");
+                                    for($i=0; $i<$no_answer; $i++){
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $i+1;?></td>
+                                            <td><?php echo $answer[$i]['user_name'];?></td>
+                                            <td><?php echo $answer[$i]['score'];?></td>
                                         </tr>
                                         <?php
                                     }

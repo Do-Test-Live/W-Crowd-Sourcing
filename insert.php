@@ -30,19 +30,9 @@ if (isset($_POST["sign_up"])) {
         $insert = $db_handle->insertQuery("INSERT INTO `user`(`user_name`, `user_email`, `password`, `college`, `major`, `hall`, `society`, `gender`, `age`, `indoor`, `outdoor`, `request_type`, `updated_at`)
 VALUES ('$username','$email','$Pwd_hashed','$college','$major','$hall','$society','$gender','$age','$indoor','$outdoor','$request_type','$inserted_at')");
         if ($insert) {
-            $score = $db_handle->runQuery("select user_id from user where user_email = '$email'");
-            $userid = $score[0]['user_id'];
-            $insert_score = $db_handle->insertQuery("INSERT INTO `score`(`user_id`) VALUES ('$userid')");
-            if ($insert_score) {
-                echo "<script>
+            echo "<script>
                 document.cookie = 'alert = 3;';
                 window.location.href='Login';
-                </script>";
-            }
-        } else {
-            echo "<script>
-                document.cookie = 'alert = 5;';
-                window.location.href='Register';
                 </script>";
         }
     } else {
@@ -68,9 +58,11 @@ if (isset($_POST['question'])) {
     $insert = $db_handle->insertQuery("INSERT INTO `question`(`question`,`user_id`, `type`, `tags`, `method`, `payment`, `waiting_time`, `inserted_at`) VALUES 
                                                                 ('$question','$userid','$type','$select_tags','$method','$payment','$waiting_time','$inserted_at')");
     if ($insert) {
+        $select_question = $db_handle->runQuery("select count(question_id) as no_of_question from question");
+        $question_id = $select_question[0]['no_of_question'];
         $tag = explode(',', $select_tags);
-        $fetch_user = $db_handle->runQuery("select user_id from score");
-        $no_fetch_user = $db_handle->numRows("select user_id from score");
+        $fetch_user = $db_handle->runQuery("select user_id from user where user_type = '1' and user_id != '$userid'");
+        $no_fetch_user = $db_handle->numRows("select user_id from user where user_type = '1' and user_id != '$userid'");
 
         for ($i = 0; $i < $no_fetch_user; $i++) {
             $hash_tags_match = 0;
@@ -79,8 +71,8 @@ if (isset($_POST['question'])) {
             $time_difference_sum = 0;
             $average_response_time = 0;
 
-            $userid = $fetch_user[$i]['user_id'];
-            $select_in_out = $db_handle->runQuery("select indoor, outdoor from user where user_id = '$userid'");
+            $user_id = $fetch_user[$i]['user_id'];
+            $select_in_out = $db_handle->runQuery("select indoor, outdoor from user where user_id = '$user_id'");
             $indoor = $select_in_out[0]['indoor'];
             $outdoor = $select_in_out[0]['outdoor'];
             foreach ($tag as $t) {
@@ -91,12 +83,12 @@ if (isset($_POST['question'])) {
                     $hash_tags_match = $hash_tags_match + 1;
                 }
             }
-            $points = $db_handle->runQuery("SELECT SUM(points) as point FROM `answer` where user_id = '$userid'");
+            $points = $db_handle->runQuery("SELECT SUM(points) as point FROM `answer` where user_id = '$user_id'");
             if (!is_null($points [0]['point'])) {
                 $past_performance = $points[0]['point'];
             }
-            $answer = $db_handle->runQuery("select * from answer where user_id = '$userid'");
-            $no_answer = $db_handle->numRows("select * from answer where user_id = '$userid'");
+            $answer = $db_handle->runQuery("select * from answer where user_id = '$user_id'");
+            $no_answer = $db_handle->numRows("select * from answer where user_id = '$user_id'");
             if ($no_answer > 0) {
                 for ($m = 0; $m < $no_answer; $m++) {
                     $answer_time = $answer[$m]['inserted_at'];
@@ -119,19 +111,19 @@ if (isset($_POST['question'])) {
                 $average_response_time = $time_difference_sum / $no_answer;
             }
 
-            $a = 3;
-            $b = 3;
-            $c = 4;
-            $score = ($a * $hash_tags_match) + ($b * $past_performance) + ((1/$c) * $average_response_time);
-            $update_score = $db_handle->insertQuery("update score set score = '$score' where user_id = '$userid'");
+            $variable = $db_handle->runQuery("select * from variables");
+            $a = $variable[0]['a'];
+            $b = $variable[0]['b'];
+            $c = $variable[0]['c'];
+            $score = ($a * $hash_tags_match) + ($b * $past_performance) + ((1 / $c) * $average_response_time);
+            $update_score = $db_handle->insertQuery("INSERT INTO `score`(`user_id`, `question_id`, `score`) VALUES ('$user_id','$question_id','$score')");
         }
-        $select_question = $db_handle->runQuery("select count(question_id) as no_of_question from question");
-        $question_id = $select_question[0]['no_of_question'];
 
-        $select_user = $db_handle->runQuery("select * from score where user_id != '$userid' order by score desc limit 10");
-        $no_select_user = $db_handle->numRows("select * from score where user_id != '$userid' order by score desc limit 10");
 
-        for($j=0; $j<$no_select_user; $j++){
+        $select_user = $db_handle->runQuery("select * from score where question_id = '$question_id' order by score desc limit 10");
+        $no_select_user = $db_handle->numRows("select * from score where question_id = '$question_id' order by score desc limit 10");
+
+        for ($j = 0; $j < $no_select_user; $j++) {
             $selected_user = $select_user[$j]['user_id'];
             $insert_notification = $db_handle->insertQuery("INSERT INTO `notification`(`user_id`, `question_id`, `inserted_at`) VALUES ('$selected_user','$question_id','$inserted_at')");
         }
@@ -171,7 +163,7 @@ if (isset($_POST['submit_answer'])) {
     }
 }
 
-if(isset($_POST['submit_notification_answer'])){
+if (isset($_POST['submit_notification_answer'])) {
     $question_id = $db_handle->checkValue($_POST['question_id']);
     $notification_id = $db_handle->checkValue($_POST['notification_id']);
     $answer = $db_handle->checkValue($_POST['answer']);
@@ -180,23 +172,24 @@ if(isset($_POST['submit_notification_answer'])){
 
     $check = $db_handle->runQuery("select * from answer where user_id = '$userid' and question_id = '$question_id'");
     $no_check = $db_handle->numRows("select * from answer where user_id = '$userid' and question_id = '$question_id'");
-    if($no_check <= 0){
+    if ($no_check <= 0) {
         $update = $db_handle->insertQuery("UPDATE `notification` SET `status`='1' WHERE notification_id = '$notification_id'");
-        if($update){
+        if ($update) {
             $insert = $db_handle->insertQuery("INSERT INTO `answer`( `user_id`, `question_id`, `answer`, `inserted_at`) VALUES ('$userid','$question_id','$answer','$inserted_at')");
-            if($insert){
+            if ($insert) {
                 echo "<script>
                 document.cookie = 'alert = 3;';
                 window.location.href='Dashboard';
                 </script>";
-            }else{
+            } else {
                 echo "<script>
                 document.cookie = 'alert = 5;';
                 window.location.href='Dashboard';
                 </script>";
             }
         }
-    }echo "<script>
+    }
+    echo "<script>
                 document.cookie = 'alert = 6;';
                 window.location.href='Dashboard';
                 </script>";
