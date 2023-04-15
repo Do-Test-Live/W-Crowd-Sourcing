@@ -20,6 +20,14 @@ RewriteRule ^View-Answer view_answer.php [NE,L]
 
 RewriteRule ^Notification question_answer.php [NE,L]
 
+RewriteRule ^All-Questions all_question.php [NE,L]
+
+RewriteRule ^Users all_user.php [NE,L]
+
+RewriteRule ^Details rating.php [NE,L]
+
 RewriteRule ^Insert insert.php [NE,L]
 
 RewriteRule ^Update update.php [NE,L]
+
+RewriteRule ^Delete delete.php [NE,L]

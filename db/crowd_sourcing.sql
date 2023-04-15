@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 12, 2023 at 02:24 PM
+-- Generation Time: Apr 13, 2023 at 02:02 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -42,9 +42,8 @@ CREATE TABLE `answer` (
 --
 
 INSERT INTO `answer` (`answer_id`, `user_id`, `question_id`, `answer`, `rating`, `points`, `inserted_at`) VALUES
-(1, 3, 4, 'This is a test answer', 5, 3, '2023-04-11 18:34:51'),
-(2, 2, 4, 'This is another test answer for checking', 0, -2, '2023-04-11 18:55:16'),
-(3, 3, 3, 'Test answer', 0, 1, '2023-04-11 19:05:40');
+(1, 3, 1, 'This is a test answer', 0, 1, '2023-04-13 19:39:24'),
+(5, 3, 2, 'This is a test answer', 0, 1, '2023-04-13 19:54:15');
 
 -- --------------------------------------------------------
 
@@ -65,6 +64,30 @@ INSERT INTO `answer_method` (`id`, `method_name`) VALUES
 (1, 'First-come-first-serve'),
 (2, 'Best answer'),
 (3, 'Mixed mode');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification`
+--
+
+CREATE TABLE `notification` (
+  `notification_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `inserted_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notification`
+--
+
+INSERT INTO `notification` (`notification_id`, `user_id`, `question_id`, `status`, `inserted_at`) VALUES
+(1, 2, 1, 0, '2023-04-13 16:21:07'),
+(2, 3, 1, 1, '2023-04-13 16:21:07'),
+(3, 2, 2, 0, '2023-04-13 16:22:50'),
+(4, 3, 2, 1, '2023-04-13 16:22:50');
 
 -- --------------------------------------------------------
 
@@ -90,10 +113,8 @@ CREATE TABLE `question` (
 --
 
 INSERT INTO `question` (`question_id`, `user_id`, `question`, `type`, `tags`, `method`, `payment`, `waiting_time`, `inserted_at`, `updated_at`) VALUES
-(1, 2, 'This is a test question', '3', 'Reading,Revision,Sports', '2', 10, '1', '2023-04-11 14:42:07', '0000-00-00 00:00:00'),
-(2, 2, 'This is another test question', '2', 'Sports,Hiking,Social Work', '1', 5, '2', '2023-04-11 14:43:09', '0000-00-00 00:00:00'),
-(3, 1, 'This is a test question from user 2 updated', '2', 'Reading,Revision,Sports', '1', 500, '10', '2023-04-11 14:54:07', '2023-04-11 16:11:44'),
-(4, 3, 'This is a test question', '2', 'Sports,Hiking', '1', 1, '0', '2023-04-11 15:16:25', '0000-00-00 00:00:00');
+(1, 4, 'This is a test question', '1', 'Music,Reading,Revision', '1', 1, '0', '2023-04-13 16:21:07', '0000-00-00 00:00:00'),
+(2, 4, 'This is another question', '3', 'Reading,Sports,Hiking', '2', 1, '30', '2023-04-13 16:22:50', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -115,6 +136,27 @@ INSERT INTO `question_type` (`id`, `question_type`) VALUES
 (2, 'Physical'),
 (3, 'Mental'),
 (4, 'F2F');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `score`
+--
+
+CREATE TABLE `score` (
+  `score_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `score` float(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `score`
+--
+
+INSERT INTO `score` (`score_id`, `user_id`, `score`) VALUES
+(1, 2, 6.00),
+(2, 3, 3.00),
+(3, 4, 3.00);
 
 -- --------------------------------------------------------
 
@@ -148,7 +190,8 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`user_id`, `user_name`, `user_email`, `password`, `college`, `major`, `hall`, `society`, `gender`, `age`, `indoor`, `outdoor`, `request_type`, `user_type`, `status`, `updated_at`) VALUES
 (1, 'Super Admin', 'admin@crowdsourcing.com', '$argon2id$v=19$m=65536,t=4,p=1$ZzJ0THpxdUZ4enFYRUJmMQ$NbXXACojeX0fcZOYDg72BtMHHHrARSdREdFtFNoDYH4', 'Test', 'Test', 'Test', 'Test', 'male', 30, 'Revision', 'Social Work', 'Mental', 0, 1, '2023-03-26 13:13:27'),
 (2, 'User 1', 'user1@test.com', '$argon2id$v=19$m=65536,t=4,p=1$ZTVTcWIyYmhiYjllcURLZg$ddruPGbnjM4f6bKrfjrk7BcO3G8NapCUcouskPJbNNE', 'Test', 'Test', 'Test', 'Test', 'male', 25, 'Reading', 'Hiking', 'Physical', 1, 1, '2023-03-26 13:15:03'),
-(3, 'User 2', 'user2@test.com', '$argon2id$v=19$m=65536,t=4,p=1$dWVJeUkzME5BZks3dU9CSA$7OsUvJrGR7B44lfGYUbljj70mIZ1Q+669dE44nblO9Y', 'Test', 'Test', 'Test', 'Test', 'female', 30, 'Reading', 'Social Work', 'F2F', 1, 1, '2023-03-26 13:16:24');
+(3, 'User 2', 'user2@test.com', '$argon2id$v=19$m=65536,t=4,p=1$dWVJeUkzME5BZks3dU9CSA$7OsUvJrGR7B44lfGYUbljj70mIZ1Q+669dE44nblO9Y', 'Test', 'Test', 'Test', 'Test', 'female', 30, 'Reading', 'Social Work', 'F2F', 1, 1, '2023-03-26 13:16:24'),
+(4, 'user 3', 'user3@test.com', '$argon2id$v=19$m=65536,t=4,p=1$RmtNOEJBbW9UV0d2emRWZw$kzKfqpkqPhQ1m/NgB+7fq/yZi3ReUjjxeyT9MYd6BD4', 'Test', 'Test', 'Test', 'Test', 'male', 21, 'Music', 'Hiking', '3', 1, 1, '2023-04-13 13:03:24');
 
 --
 -- Indexes for dumped tables
@@ -167,6 +210,12 @@ ALTER TABLE `answer_method`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`notification_id`);
+
+--
 -- Indexes for table `question`
 --
 ALTER TABLE `question`
@@ -177,6 +226,12 @@ ALTER TABLE `question`
 --
 ALTER TABLE `question_type`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `score`
+--
+ALTER TABLE `score`
+  ADD PRIMARY KEY (`score_id`);
 
 --
 -- Indexes for table `user`
@@ -192,7 +247,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `answer`
 --
 ALTER TABLE `answer`
-  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `answer_method`
@@ -201,10 +256,16 @@ ALTER TABLE `answer_method`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `notification`
+--
+ALTER TABLE `notification`
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `question_type`
@@ -213,10 +274,16 @@ ALTER TABLE `question_type`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `score`
+--
+ALTER TABLE `score`
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

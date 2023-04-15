@@ -117,42 +117,86 @@ $userid = $_SESSION['userid'];
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-lg-6 col-sm-6">
-                            <div class="widget-stat card bg-info">
-                                <div class="card-body p-4">
-                                    <div class="media">
+                        <?php if($user_type == 1){
+                            ?>
+                            <div class="col-xl-3 col-lg-6 col-sm-6">
+                                <div class="widget-stat card bg-info">
+                                    <div class="card-body p-4">
+                                        <div class="media">
 									<span class="mr-3">
 										<i class="flaticon-381-search-2"></i>
 									</span>
-                                        <div class="media-body text-white text-right">
-                                            <p class="mb-1">Questions You Answered</p>
-                                            <?php
-                                            $answer = $db_handle->runQuery("SELECT COUNT(answer_id) as answer from answer WHERE user_id = '$userid'");
-                                            ?>
-                                            <h3 class="text-white"><?php echo $answer[0]['answer'];?></h3>
+                                            <div class="media-body text-white text-right">
+                                                <p class="mb-1">Questions You Answered</p>
+                                                <?php
+                                                $answer = $db_handle->runQuery("SELECT COUNT(answer_id) as answer from answer WHERE user_id = '$userid'");
+                                                ?>
+                                                <h3 class="text-white"><?php echo $answer[0]['answer'];?></h3>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-6 col-sm-6">
-                            <div class="widget-stat card bg-primary">
-                                <div class="card-body p-4">
-                                    <div class="media">
+                            <div class="col-xl-3 col-lg-6 col-sm-6">
+                                <div class="widget-stat card bg-primary">
+                                    <div class="card-body p-4">
+                                        <div class="media">
 									<span class="mr-3">
 										<i class="flaticon-381-heart"></i>
 									</span>
-                                        <div class="media-body text-white text-right">
-                                            <p class="mb-1">My Points</p>
-                                            <?php
-                                            $points = $db_handle->runQuery("SELECT SUM(points) as point FROM `answer` where user_id = '$userid'");
-                                            ?>
-                                            <h3 class="text-white"><?php echo $points[0]['point'];?></h3>
+                                            <div class="media-body text-white text-right">
+                                                <p class="mb-1">My Points</p>
+                                                <?php
+                                                $points = $db_handle->runQuery("SELECT SUM(points) as point FROM `answer` where user_id = '$userid'");
+                                                ?>
+                                                <h3 class="text-white"><?php echo $points[0]['point'];?></h3>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <?php
+                        }else{
+                            ?>
+                            <div class="col-xl-3 col-lg-6 col-sm-6">
+                                <div class="widget-stat card bg-info">
+                                    <div class="card-body p-4">
+                                        <div class="media">
+									<span class="mr-3">
+										<i class="flaticon-381-search-2"></i>
+									</span>
+                                            <div class="media-body text-white text-right">
+                                                <p class="mb-1">Total Answer</p>
+                                                <?php
+                                                $answer = $db_handle->runQuery("SELECT COUNT(answer_id) as answer from answer");
+                                                ?>
+                                                <h3 class="text-white"><?php echo $answer[0]['answer'];?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-sm-6">
+                                <div class="widget-stat card bg-primary">
+                                    <div class="card-body p-4">
+                                        <div class="media">
+									<span class="mr-3">
+										<i class="flaticon-381-heart"></i>
+									</span>
+                                            <div class="media-body text-white text-right">
+                                                <p class="mb-1">Total Rated Answers</p>
+                                                <?php
+                                                $rating = $db_handle->runQuery("SELECT COUNT(answer_id) as answer from answer where rating != '0'");
+                                                ?>
+                                                <h3 class="text-white"><?php echo $rating[0]['answer'];?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        } ?>
+
                     </div>
                 </div>
 
