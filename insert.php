@@ -115,8 +115,12 @@ if (isset($_POST['question'])) {
             $a = $variable[0]['a'];
             $b = $variable[0]['b'];
             $c = $variable[0]['c'];
+            $first_part = $a * $hash_tags_match;
+            $second_part = $b * $past_performance;
+            $third_part = (1 / $c) * $average_response_time;
             $score = ($a * $hash_tags_match) + ($b * $past_performance) + ((1 / $c) * $average_response_time);
-            $update_score = $db_handle->insertQuery("INSERT INTO `score`(`user_id`, `question_id`, `score`) VALUES ('$user_id','$question_id','$score')");
+            $update_score = $db_handle->insertQuery("INSERT INTO `score`(`user_id`, `question_id`, `score`,`first_part`,`second_part`,`third_part`) 
+VALUES ('$user_id','$question_id','$score','$first_part','$second_part','$third_part')");
         }
 
 

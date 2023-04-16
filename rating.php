@@ -137,7 +137,10 @@ $question_id = $_GET['question_id'];
                                     <tr>
                                         <th>Sl No</th>
                                         <th>User Name</th>
-                                        <th>Score</th>
+                                        <th>First Part</th>
+                                        <th>Second Part</th>
+                                        <th>Third Part</th>
+                                        <th>Total Score</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -149,6 +152,9 @@ $question_id = $_GET['question_id'];
                                         <tr>
                                             <td><?php echo $i+1;?></td>
                                             <td><?php echo $answer[$i]['user_name'];?></td>
+                                            <td><?php echo $answer[$i]['first_part'];?></td>
+                                            <td><?php echo $answer[$i]['second_part'];?></td>
+                                            <td><?php echo $answer[$i]['third_part'];?></td>
                                             <td><?php echo $answer[$i]['score'];?></td>
                                         </tr>
                                         <?php
